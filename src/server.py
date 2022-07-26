@@ -9,20 +9,20 @@ import rpyc
 
 PORT = 18861    
 
-class StringSplitter(rpyc.Service):
+class StringParser(rpyc.Service):
     def on_connect(self, conn):
         # code that runs when a connection is created
         # (to init the service, if needed)
-        print("Thread Created")
+        print("Thread created for client request.")
 
     def on_disconnect(self, conn):
         # code that runs after the connection has already closed
         # (to finalize the service, if needed)
-        print("Thread Closed")
+        print("Request completed. Response sent to client. Thread closed.\n")
 
     # Exposed Microservice Methods
 
-    def exposed_splitStringWithHTML(self, input): # this is an exposed method
+    def exposed_splitStringWithHTML(self, input):
         period = self.splitPeriod(input)
         question = self.splitQuestionMark(period)
         exclamation = self.splitExclamationMark(question)
@@ -46,5 +46,5 @@ class StringSplitter(rpyc.Service):
 if __name__ == "__main__":
     print("\nServer Live. Listening for requests. Press Ctrl + C to cancel.\n")
     from rpyc.utils.server import ThreadedServer
-    t = ThreadedServer(StringSplitter, port=PORT)
+    t = ThreadedServer(StringParser, port=PORT)
     t.start()
